@@ -12,6 +12,15 @@ const cards = [
 //Armazena as cartas usadas no game
 const cardsInGame = [];
 
+//Conteúdo da carta
+let contentCards = "";
+
+
+//embaralha cartas
+const shuffle = () => {
+    return Math.random() - 0.5;
+}
+cards.sort(shuffle);
 
 //Definir quantas cartas
 let numCards = parseInt(prompt("Deseja jogar com quantas cartas? Insira um valor par entre de 4 a 14"));
@@ -20,40 +29,40 @@ while (numCards < 4 || numCards > 14 || numCards % 2 != 0) {
     numCards = parseInt(prompt("Informe um valor válido (4~14)"))
 }
 
-// set nas cartas a serem usadas
-const setCardsInGame = (cards) => {
+// set das imagens nas cartas a serem usadas
+const setCardsInGame = (cards) => { // function setCardsInGame(cards)
     cards.length = numCards / 2;
     cards.forEach(card => {
         cardsInGame.push(card);
         cardsInGame.push(card);
-        console.log(cardsInGame)
     });
-
-    cardsInGame.sort(comparador);
-
-    function comparador() {
-        return Math.random() - 0.5;
-    }
+    cardsInGame.sort(shuffle);
+    console.log(cardsInGame)
 }
 
 //carrega o conteúdo do html
 const loadCardsInGame = (cardsInGame, classElement) => {
 
-    let contentCards = "";
     cardsInGame.forEach(card => {
         contentCards +=
-            `<div class="card">
-                <div class="front-face face">
-                    <img src="./img/front.png" alt="papagaio do balacobaco">
+            `<div class="card" onclick="rotateCard(this)">
+                <div class="frente face">
+                    <img src="img/front.png" alt="Papagaio" />
             </div>
-                <div class="back-face face">
-                    <img src="${card.image}" alt="papagaio do balacobaco">
-                </div>
+            <div class="verso face">
+                <img src="${card}" alt="Papagaio do balacobaco" />
+            </div>
             </div>`;
     });
-
     document.querySelector(`.${classElement}`).innerHTML = contentCards;
 }
 
 setCardsInGame(cards)
 loadCardsInGame(cardsInGame, "card-container");
+
+const rotateCard = (cardToRotate) => {
+    cardToRotate.classList.toggle("rotate");
+}
+
+
+

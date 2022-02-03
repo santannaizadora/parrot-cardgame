@@ -30,7 +30,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    max-width: 81%;
+    width: 81%;
     margin: 0 auto;
 }
 

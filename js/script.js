@@ -25,9 +25,12 @@ const startGame = () => {
     while (numCards < 4 || numCards > 14 || numCards % 2 != 0) {
         numCards = parseInt(prompt("Informe um valor válido (4~14)"))
     }
+
+    setCardsInGame(cards)
+    loadCardsInGame(cardsInGame, "card-container");
 }
 
-startGame();
+
 
 const setCardsInGame = (cards) => {
     cards.length = numCards / 2;
@@ -55,8 +58,7 @@ const loadCardsInGame = (cardsInGame, classElement) => {
     document.querySelector(`.${classElement}`).innerHTML = contentCards;
 }
 
-setCardsInGame(cards)
-loadCardsInGame(cardsInGame, "card-container");
+
 
 function turnCard(cardToRotate) {
     if (!cardToRotate.classList.contains('turned') && !cardToRotate.classList.contains('selected')) {
@@ -101,3 +103,5 @@ const verifyWin = () => {
         }
     }, 400);
 }
+
+startGame();

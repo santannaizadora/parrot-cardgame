@@ -11,13 +11,13 @@ let cardComparator = [];
 let click = true;
 let counter = 0;
 let counterPairs = 0;
-const cardsInGame = [];
+let cardsInGame = [];
 let contentCards = "";
 
 const shuffle = () => {
     return Math.random() - 0.5;
 }
-cards.sort(shuffle);
+
 
 let numCards = parseInt(prompt("Deseja jogar com quantas cartas? Insira um valor par entre de 4 a 14"));
 
@@ -25,12 +25,10 @@ const startGame = () => {
     while (numCards < 4 || numCards > 14 || numCards % 2 != 0) {
         numCards = parseInt(prompt("Informe um valor válido (4~14)"))
     }
-
+    cards.sort(shuffle);
     setCardsInGame(cards)
-    loadCardsInGame(cardsInGame, "card-container");
+    loadCardsInGame(cardsInGame);
 }
-
-
 
 const setCardsInGame = (cards) => {
     cards.length = numCards / 2;
@@ -42,23 +40,21 @@ const setCardsInGame = (cards) => {
     console.log(cardsInGame)
 }
 
-const loadCardsInGame = (cardsInGame, classElement) => {
+const loadCardsInGame = (cardsInGame) => {
 
     cardsInGame.forEach(card => {
         contentCards +=
-            `<div class="card" onclick="turnCard(this)">
-                <div class="front-face face">
+            `<div class="card" onclick="turnCard(this)" data-identifier="card">
+                <div class=" front-face face" data-identifier="back-face">
+                    <img src="${card}" alt="Papagaio do balacobaco" />
+                </div>
+                <div class="back-face face" data-identifier="front-face">
                     <img src="img/front.png" alt="Papagaio" />
-            </div>
-            <div class="back-face face">
-                <img src="${card}" alt="Papagaio do balacobaco" />
-            </div>
+                </div>
             </div>`;
     });
-    document.querySelector(`.${classElement}`).innerHTML = contentCards;
+    document.querySelector(`.card-container`).innerHTML = contentCards;
 }
-
-
 
 function turnCard(cardToRotate) {
     if (click && !cardToRotate.classList.contains('turned') && !cardToRotate.classList.contains('selected')) {
@@ -68,8 +64,7 @@ function turnCard(cardToRotate) {
         document.getElementById('plays').innerHTML = `${counter}`
         console.log(counter);
 
-        if (cardComparator.length === 2 ) {
-        
+        if (cardComparator.length === 2) {
             verifyCards()
         }
     }
@@ -86,7 +81,7 @@ function verifyCards() {
         counterPairs++;
         click = true;
         verifyWin()
-    } else{
+    } else {
         console.log('Comparando...');
         click = false;
         setTimeout(() => {
@@ -98,16 +93,28 @@ function verifyCards() {
             click = true;
         }, 1000);
     }
-    
-    
+}
 
-
+const resetGame = () => {
+    let cards = document.querySelector('.card-container')
+    cards.innerHTML='';
+    contentCards = ""
+    document.getElementById('plays').innerHTML = `0`
+    numCards = 0;
+    counterPairs = 0;
+    counter = 0;
+    cardsInGame = [];
 }
 
 const verifyWin = () => {
     setTimeout(() => {
         if (counterPairs === numCards / 2) {
             alert(`Você ganhou em ${counter} jogadas!`)
+            let restart = prompt("Deseja jogar novamente? Digite s para recomeçar")
+            if (restart === 's') {
+                resetGame();
+                startGame();
+            }
         }
     }, 400);
 }

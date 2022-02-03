@@ -1,4 +1,3 @@
-//Objeto com as cartas
 const cards = [
     'img/bobrossparrot.gif',
     'img/explodyparrot.gif',
@@ -8,29 +7,29 @@ const cards = [
     'img/tripletsparrot.gif',
     'img/unicornparrot.gif'
 ]
-
-//Armazena as cartas usadas no game
+let cardComparator = [];
+let auxComparator = [];
+let counter = 0;
+let counterPairs = 0;
 const cardsInGame = [];
-
-//Conteúdo da carta
 let contentCards = "";
 
-
-//embaralha cartas
 const shuffle = () => {
     return Math.random() - 0.5;
 }
 cards.sort(shuffle);
 
-//Definir quantas cartas
 let numCards = parseInt(prompt("Deseja jogar com quantas cartas? Insira um valor par entre de 4 a 14"));
 
-while (numCards < 4 || numCards > 14 || numCards % 2 != 0) {
-    numCards = parseInt(prompt("Informe um valor válido (4~14)"))
+const startGame = () => {
+    while (numCards < 4 || numCards > 14 || numCards % 2 != 0) {
+        numCards = parseInt(prompt("Informe um valor válido (4~14)"))
+    }
 }
 
-// set das imagens nas cartas a serem usadas
-const setCardsInGame = (cards) => { // function setCardsInGame(cards)
+startGame();
+
+const setCardsInGame = (cards) => {
     cards.length = numCards / 2;
     cards.forEach(card => {
         cardsInGame.push(card);
@@ -40,16 +39,15 @@ const setCardsInGame = (cards) => { // function setCardsInGame(cards)
     console.log(cardsInGame)
 }
 
-//carrega o conteúdo do html
 const loadCardsInGame = (cardsInGame, classElement) => {
 
     cardsInGame.forEach(card => {
         contentCards +=
-            `<div class="card" onclick="rotateCard(this)">
-                <div class="frente face">
+            `<div class="card" onclick="turnCard(this)">
+                <div class="front-face face">
                     <img src="img/front.png" alt="Papagaio" />
             </div>
-            <div class="verso face">
+            <div class="back-face face">
                 <img src="${card}" alt="Papagaio do balacobaco" />
             </div>
             </div>`;
@@ -60,9 +58,46 @@ const loadCardsInGame = (cardsInGame, classElement) => {
 setCardsInGame(cards)
 loadCardsInGame(cardsInGame, "card-container");
 
-const rotateCard = (cardToRotate) => {
-    cardToRotate.classList.toggle("rotate");
+function turnCard(cardToRotate) {
+    if (!cardToRotate.classList.contains('turned') && !cardToRotate.classList.contains('selected')) {
+        cardToRotate.classList.add('rotate', 'selected')
+        cardComparator.push(cardToRotate)
+        counter++
+        document.getElementById('plays').innerHTML = `${counter}`
+        console.log(counter);
+    }
+
+    if (cardComparator.length === 2) {
+        verifyCards()
+    }
 }
 
+function verifyCards() {
+    cardComparator[0].querySelector('.back-face')
+    cardComparator[1].querySelector('.back-face')
+    if (cardComparator[0].innerHTML == cardComparator[1].innerHTML) {
+        console.log('parabains');
+        cardComparator[0].classList.add('turned')
+        cardComparator[1].classList.add('turned')
+        cardComparator.splice(0)
+        cardComparator.splice(1)
+        counterPairs++;
+        verifyWin()
+    } else if (cardComparator[1] != undefined) {
+        console.log('Erroou');
+        setTimeout(() => {
+            cardComparator[0].classList.remove('rotate', 'selected')
+            cardComparator[1].classList.remove('rotate', 'selected')
+            cardComparator.splice(0)
+            cardComparator.splice(1)
+        }, 1000);
+    }
+}
 
-
+const verifyWin = () => {
+    setTimeout(() => {
+        if (counterPairs === numCards / 2) {
+            alert('PARABÉNS!!!')
+        }
+    }, 400);
+}

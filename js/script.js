@@ -8,7 +8,7 @@ const cards = [
     'img/unicornparrot.gif'
 ]
 let cardComparator = [];
-let auxComparator = [];
+let click = true;
 let counter = 0;
 let counterPairs = 0;
 const cardsInGame = [];
@@ -61,45 +61,53 @@ const loadCardsInGame = (cardsInGame, classElement) => {
 
 
 function turnCard(cardToRotate) {
-    if (!cardToRotate.classList.contains('turned') && !cardToRotate.classList.contains('selected')) {
+    if (click && !cardToRotate.classList.contains('turned') && !cardToRotate.classList.contains('selected')) {
         cardToRotate.classList.add('rotate', 'selected')
         cardComparator.push(cardToRotate)
         counter++
         document.getElementById('plays').innerHTML = `${counter}`
         console.log(counter);
-    }
 
-    if (cardComparator.length === 2) {
-        verifyCards()
+        if (cardComparator.length === 2 ) {
+        
+            verifyCards()
+        }
     }
 }
 
 function verifyCards() {
-    cardComparator[0].querySelector('.back-face')
-    cardComparator[1].querySelector('.back-face')
     if (cardComparator[0].innerHTML == cardComparator[1].innerHTML) {
+        click = false;
         console.log('parabains');
         cardComparator[0].classList.add('turned')
         cardComparator[1].classList.add('turned')
         cardComparator.splice(0)
         cardComparator.splice(1)
         counterPairs++;
+        click = true;
         verifyWin()
-    } else if (cardComparator[1] != undefined) {
-        console.log('Erroou');
+    } else{
+        console.log('Comparando...');
+        click = false;
         setTimeout(() => {
             cardComparator[0].classList.remove('rotate', 'selected')
             cardComparator[1].classList.remove('rotate', 'selected')
             cardComparator.splice(0)
             cardComparator.splice(1)
+            console.log('Erroou');
+            click = true;
         }, 1000);
     }
+    
+    
+
+
 }
 
 const verifyWin = () => {
     setTimeout(() => {
         if (counterPairs === numCards / 2) {
-            alert('PARABÉNS!!!')
+            alert(`Você ganhou em ${counter} jogadas!`)
         }
     }, 400);
 }

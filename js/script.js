@@ -13,11 +13,15 @@ let counter = 0;
 let counterPairs = 0;
 let cardsInGame = [];
 let contentCards = "";
+let gameWin = false;
+let timer = 0;
+let seg = 0;
+let initialTime = 0;
+let currentTime = 0;
 
 const shuffle = () => {
     return Math.random() - 0.5;
 }
-
 
 let numCards = parseInt(prompt("Deseja jogar com quantas cartas? Insira um valor par entre de 4 a 14"));
 
@@ -31,17 +35,16 @@ const startGame = () => {
 }
 
 const setCardsInGame = (cards) => {
-    images = cards.slice(0, (numCards/2))
+    images = cards.slice(0, (numCards / 2))
     images.forEach(card => {
         cardsInGame.push(card);
         cardsInGame.push(card);
     });
     cardsInGame.sort(shuffle);
-    console.log(cardsInGame)
 }
 
 const loadCardsInGame = (cardsInGame) => {
-
+    cardsInGame.sort(shuffle);
     cardsInGame.forEach(card => {
         contentCards +=
             `<div class="card" onclick="turnCard(this)" data-identifier="card">
@@ -62,7 +65,10 @@ function turnCard(cardToRotate) {
         cardComparator.push(cardToRotate)
         counter++
         document.getElementById('plays').innerHTML = `${counter}`
-        console.log(counter);
+        if (counter == 1) {
+            gameWin = false
+            startChronometer();
+        }
 
         if (cardComparator.length === 2) {
             verifyCards()
@@ -73,7 +79,6 @@ function turnCard(cardToRotate) {
 function verifyCards() {
     if (cardComparator[0].innerHTML == cardComparator[1].innerHTML) {
         click = false;
-        console.log('parabains');
         cardComparator[0].classList.add('turned')
         cardComparator[1].classList.add('turned')
         cardComparator.splice(0)
@@ -82,39 +87,59 @@ function verifyCards() {
         click = true;
         verifyWin()
     } else {
-        console.log('Comparando...');
         click = false;
         setTimeout(() => {
             cardComparator[0].classList.remove('rotate', 'selected')
             cardComparator[1].classList.remove('rotate', 'selected')
             cardComparator.splice(0)
             cardComparator.splice(1)
-            console.log('Erroou');
             click = true;
         }, 1000);
     }
 }
 
+const startChronometer = () => {
+    initialTime = new Date();
+    setTimeout(chronometer, 1000);
+}
+
+const chronometer = () => {
+    if (!gameWin) {
+        currentTime = new Date();
+
+        timer = Math.trunc((currentTime - initialTime) / 1000);
+        attTimer();
+        setTimeout(chronometer, 1000);
+    }
+}
+
+const attTimer = () => {
+    let elemento = document.getElementById('timer')
+    elemento.innerHTML = `${timer}`;
+}
+
 const resetGame = () => {
-    let cards = document.querySelector('.card-container')
-    cards.innerHTML='';
+    document.querySelector('.card-container').innerHTML = '';
+    document.getElementById('timer').innerHTML = '0';
     contentCards = ""
-    document.getElementById('plays').innerHTML = `0`
     numCards = 0;
     counterPairs = 0;
     counter = 0;
     cardsInGame = [];
+    timer = 0;
+    initialTime = 0;
+    currentTime = 0;
     startGame();
 }
 
 const verifyWin = () => {
     setTimeout(() => {
         if (counterPairs === numCards / 2) {
-            alert(`Você ganhou em ${counter} jogadas!`)
+            gameWin = true;
+            alert(`Você ganhou em ${counter} jogadas e ${timer} segundos!`)
             let restart = prompt("Deseja jogar novamente? Digite s para recomeçar")
             if (restart === 's') {
                 resetGame();
-                
             }
         }
     }, 400);

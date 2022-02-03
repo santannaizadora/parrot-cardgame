@@ -1,13 +1,47 @@
-*{
+* {
     box-sizing: border-box;
 }
 
-body{
-    background-color:#EEF9BF;
+body {
+    background-color: #EEF9BF;
     ;
 }
 
-header{
+.game-name {
+    text-align: center;
+}
+
+h3 {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 56px;
+    line-height: 66px;
+    letter-spacing: -0.004em;
+    color: #75B79E;
+    margin: 0 auto;
+}
+
+.game-status {
+    width: 81%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-bottom: 30px;
+}
+
+.game-status p {
+    font-size: 20px;
+    color: #75B79E;
+    font-weight: bold;
+}
+
+@media (max-width: 614px) {
+    h3 {
+        font-size: 36px;
+        line-height: 42px;
+        text-align: center;
+    }
 }

@@ -31,8 +31,8 @@ const startGame = () => {
 }
 
 const setCardsInGame = (cards) => {
-    cards.length = numCards / 2;
-    cards.forEach(card => {
+    images = cards.slice(0, (numCards/2))
+    images.forEach(card => {
         cardsInGame.push(card);
         cardsInGame.push(card);
     });
@@ -104,6 +104,7 @@ const resetGame = () => {
     counterPairs = 0;
     counter = 0;
     cardsInGame = [];
+    startGame();
 }
 
 const verifyWin = () => {
@@ -113,7 +114,7 @@ const verifyWin = () => {
             let restart = prompt("Deseja jogar novamente? Digite s para recomeçar")
             if (restart === 's') {
                 resetGame();
-                startGame();
+                
             }
         }
     }, 400);

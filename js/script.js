@@ -12,7 +12,6 @@ let cardComparator = [];
 let canClick = true;
 let counter = 0;
 let counterPairs = 0;
-
 let contentCards = "";
 let gameWin = false;
 let timer = 0;
@@ -50,7 +49,6 @@ const setCardsInGame = (cards) => {
 }
 
 const loadCardsInGame = (cardsInGame) => {
-    cardsInGame.sort(shuffle);
     cardsInGame.forEach(card => {
         contentCards +=
             `<div class="card" onclick="turnCard(this)" data-identifier="card">

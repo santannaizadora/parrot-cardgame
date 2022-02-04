@@ -52,10 +52,10 @@ const loadCardsInGame = (cardsInGame) => {
     cardsInGame.forEach(card => {
         contentCards +=
             `<div class="card" onclick="turnCard(this)" data-identifier="card">
-                <div class=" front-face face" data-identifier="back-face">
+                <div class=" front-face face" data-identifier="front-face">
                     <img src="${card}" alt="Papagaio do balacobaco" />
                 </div>
-                <div class="back-face face" data-identifier="front-face">
+                <div class="back-face face" data-identifier="back-face">
                     <img src="img/front.png" alt="Papagaio" />
                 </div>
             </div>`;

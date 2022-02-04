@@ -7,32 +7,32 @@ const cards = [
     'img/tripletsparrot.gif',
     'img/unicornparrot.gif'
 ]
+let cardsInGame = [];
 let cardComparator = [];
 let click = true;
 let counter = 0;
 let counterPairs = 0;
-let cardsInGame = [];
+
 let contentCards = "";
 let gameWin = false;
 let timer = 0;
 let initialTime = 0;
 let currentTime = 0;
+let numCards = 0;
+let message = "Deseja jogar com quantas cartas? Insira um valor par entre de 4 a 14";
 
 const shuffle = () => {
     return Math.random() - 0.5;
 }
 
-let numCards = 0
-let message = "Deseja jogar com quantas cartas? Insira um valor par entre de 4 a 14"
-
 const startGame = () => {
     numCards = getNumCards();
     if (numCards < 4 || numCards > 14 || numCards % 2 != 0) {
-        message = "Informe um valor válido (4~14)"
+        message = "Informe um valor válido (4~14)";
         startGame();
     } else {
         cards.sort(shuffle);
-        setCardsInGame(cards)
+        setCardsInGame(cards);
         loadCardsInGame(cardsInGame);
     }
 }
@@ -42,7 +42,7 @@ const getNumCards = () => {
 }
 
 const setCardsInGame = (cards) => {
-    images = cards.slice(0, (numCards / 2))
+    images = cards.slice(0, (numCards / 2));
     images.forEach(card => {
         cardsInGame.push(...[card, card]);
     });
@@ -67,16 +67,15 @@ const loadCardsInGame = (cardsInGame) => {
 
 const turnCard = (cardToRotate) => {
     if (click && !cardToRotate.classList.contains('turned') && !cardToRotate.classList.contains('selected')) {
-        cardToRotate.classList.add('rotate', 'selected')
-        cardComparator.push(cardToRotate)
+        cardToRotate.classList.add('rotate', 'selected');
+        cardComparator.push(cardToRotate);
         attCounter()
         if (counter == 1) {
-            gameWin = false
+            gameWin = false;
             startChronometer();
         }
-
         if (cardComparator.length === 2) {
-            verifyCards()
+            verifyCards();
         }
     }
 }
@@ -85,7 +84,7 @@ const verifyCards = () => {
     if (cardComparator[0].innerHTML == cardComparator[1].innerHTML) {
         click = false;
         cardComparator.forEach(item => {
-            item.classList.add('turned')
+            item.classList.add('turned');
         });
         cardComparator = [];
         counterPairs++;
@@ -95,7 +94,7 @@ const verifyCards = () => {
         click = false;
         setTimeout(() => {
             cardComparator.forEach(item => {
-                item.classList.remove('rotate', 'selected')
+                item.classList.remove('rotate', 'selected');
             });
             cardComparator = [];
             click = true;
@@ -111,7 +110,6 @@ const startChronometer = () => {
 const chronometer = () => {
     if (!gameWin) {
         currentTime = new Date();
-
         timer = Math.trunc((currentTime - initialTime) / 1000);
         attTimer();
         setTimeout(chronometer, 1000);
@@ -119,8 +117,8 @@ const chronometer = () => {
 }
 
 const attCounter = () => {
-    counter++
-    document.getElementById('plays').innerHTML = `${counter}`
+    counter++;
+    document.getElementById('plays').innerHTML = `${counter}`;
 }
 
 const attTimer = () => {
@@ -130,7 +128,7 @@ const attTimer = () => {
 const resetGame = () => {
     document.querySelector('.card-container').innerHTML = '';
     document.getElementById('timer').innerHTML = '0';
-    contentCards = ""
+    contentCards = "";
     numCards = 0;
     counterPairs = 0;
     counter = 0;
@@ -145,8 +143,8 @@ const verifyWin = () => {
     setTimeout(() => {
         if (counterPairs === numCards / 2) {
             gameWin = true;
-            alert(`Você ganhou em ${counter} jogadas e ${timer} segundos!`)
-            const restart = prompt("Deseja jogar novamente? Digite s para recomeçar")
+            alert(`Você ganhou em ${counter} jogadas e ${timer} segundos!`);
+            const restart = prompt("Deseja jogar novamente? Digite s para recomeçar");
             if (restart === 's') {
                 resetGame();
             }

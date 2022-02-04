@@ -9,7 +9,7 @@ const cards = [
 ]
 let cardsInGame = [];
 let cardComparator = [];
-let click = true;
+let canClick = true;
 let counter = 0;
 let counterPairs = 0;
 
@@ -66,7 +66,7 @@ const loadCardsInGame = (cardsInGame) => {
 }
 
 const turnCard = (cardToRotate) => {
-    if (click && !cardToRotate.classList.contains('turned') && !cardToRotate.classList.contains('selected')) {
+    if (canClick && !cardToRotate.classList.contains('turned') && !cardToRotate.classList.contains('selected')) {
         cardToRotate.classList.add('rotate', 'selected');
         cardComparator.push(cardToRotate);
         attCounter()
@@ -82,22 +82,22 @@ const turnCard = (cardToRotate) => {
 
 const verifyCards = () => {
     if (cardComparator[0].innerHTML == cardComparator[1].innerHTML) {
-        click = false;
+        canClick = false;
         cardComparator.forEach(item => {
             item.classList.add('turned');
         });
         cardComparator = [];
         counterPairs++;
         verifyWin();
-        click = true;
+        canClick = true;
     } else {
-        click = false;
+        canClick = false;
         setTimeout(() => {
             cardComparator.forEach(item => {
                 item.classList.remove('rotate', 'selected');
             });
             cardComparator = [];
-            click = true;
+            canClick = true;
         }, 1000);
     }
 }

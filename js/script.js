@@ -15,7 +15,6 @@ let cardsInGame = [];
 let contentCards = "";
 let gameWin = false;
 let timer = 0;
-let seg = 0;
 let initialTime = 0;
 let currentTime = 0;
 
@@ -23,22 +22,29 @@ const shuffle = () => {
     return Math.random() - 0.5;
 }
 
-let numCards = parseInt(prompt("Deseja jogar com quantas cartas? Insira um valor par entre de 4 a 14"));
+let numCards = 0
+let message = "Deseja jogar com quantas cartas? Insira um valor par entre de 4 a 14"
 
 const startGame = () => {
-    while (numCards < 4 || numCards > 14 || numCards % 2 != 0) {
-        numCards = parseInt(prompt("Informe um valor válido (4~14)"))
+    numCards = getNumCards();
+    if (numCards < 4 || numCards > 14 || numCards % 2 != 0) {
+        message = "Informe um valor válido (4~14)"
+        startGame();
+    } else {
+        cards.sort(shuffle);
+        setCardsInGame(cards)
+        loadCardsInGame(cardsInGame);
     }
-    cards.sort(shuffle);
-    setCardsInGame(cards)
-    loadCardsInGame(cardsInGame);
+}
+
+const getNumCards = () => {
+    return parseInt(prompt(message));
 }
 
 const setCardsInGame = (cards) => {
     images = cards.slice(0, (numCards / 2))
     images.forEach(card => {
-        cardsInGame.push(card);
-        cardsInGame.push(card);
+        cardsInGame.push(...[card, card]);
     });
     cardsInGame.sort(shuffle);
 }
@@ -59,12 +65,11 @@ const loadCardsInGame = (cardsInGame) => {
     document.querySelector(`.card-container`).innerHTML = contentCards;
 }
 
-function turnCard(cardToRotate) {
+const turnCard = (cardToRotate) => {
     if (click && !cardToRotate.classList.contains('turned') && !cardToRotate.classList.contains('selected')) {
         cardToRotate.classList.add('rotate', 'selected')
         cardComparator.push(cardToRotate)
-        counter++
-        document.getElementById('plays').innerHTML = `${counter}`
+        attCounter()
         if (counter == 1) {
             gameWin = false
             startChronometer();
@@ -76,23 +81,23 @@ function turnCard(cardToRotate) {
     }
 }
 
-function verifyCards() {
+const verifyCards = () => {
     if (cardComparator[0].innerHTML == cardComparator[1].innerHTML) {
         click = false;
-        cardComparator[0].classList.add('turned')
-        cardComparator[1].classList.add('turned')
-        cardComparator.splice(0)
-        cardComparator.splice(1)
+        cardComparator.forEach(item => {
+            item.classList.add('turned')
+        });
+        cardComparator = [];
         counterPairs++;
+        verifyWin();
         click = true;
-        verifyWin()
     } else {
         click = false;
         setTimeout(() => {
-            cardComparator[0].classList.remove('rotate', 'selected')
-            cardComparator[1].classList.remove('rotate', 'selected')
-            cardComparator.splice(0)
-            cardComparator.splice(1)
+            cardComparator.forEach(item => {
+                item.classList.remove('rotate', 'selected')
+            });
+            cardComparator = [];
             click = true;
         }, 1000);
     }
@@ -113,9 +118,13 @@ const chronometer = () => {
     }
 }
 
+const attCounter = () => {
+    counter++
+    document.getElementById('plays').innerHTML = `${counter}`
+}
+
 const attTimer = () => {
-    let elemento = document.getElementById('timer')
-    elemento.innerHTML = `${timer}`;
+    document.getElementById('timer').innerHTML = `${timer}`;
 }
 
 const resetGame = () => {
@@ -137,7 +146,7 @@ const verifyWin = () => {
         if (counterPairs === numCards / 2) {
             gameWin = true;
             alert(`Você ganhou em ${counter} jogadas e ${timer} segundos!`)
-            let restart = prompt("Deseja jogar novamente? Digite s para recomeçar")
+            const restart = prompt("Deseja jogar novamente? Digite s para recomeçar")
             if (restart === 's') {
                 resetGame();
             }

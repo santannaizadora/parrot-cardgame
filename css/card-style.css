@@ -24,6 +24,7 @@
     justify-content: center;
     position: absolute;
     backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
 .card-container {
@@ -32,6 +33,7 @@
     justify-content: center;
     width: 81%;
     margin: 0 auto;
+    position: relative;
 }
 
 .card img {

@@ -66,8 +66,8 @@ const loadCardsInGame = (cardsInGame) => {
 }
 
 const turnCard = (cardToRotate) => {
-    if (canClick && !cardToRotate.classList.contains('turned') && !cardToRotate.classList.contains('selected')) {
-        cardToRotate.classList.add('rotate', 'selected');
+    if (canClick && !cardToRotate.classList.contains('turned')) {
+        cardToRotate.classList.add('rotate', 'turned');
         cardComparator.push(cardToRotate);
         attCounter()
         if (counter == 1) {
@@ -94,7 +94,7 @@ const verifyCards = () => {
         canClick = false;
         setTimeout(() => {
             cardComparator.forEach(item => {
-                item.classList.remove('rotate', 'selected');
+                item.classList.remove('rotate', 'turned');
             });
             cardComparator = [];
             canClick = true;
